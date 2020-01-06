@@ -2,9 +2,7 @@ package com.publiccms.common.database;
 
 import java.io.IOException;
 import java.io.StringWriter;
-import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
-import java.net.URLEncoder;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Arrays;
@@ -13,7 +11,6 @@ import java.util.Properties;
 
 import com.publiccms.common.base.AbstractCmsUpgrader;
 import com.publiccms.common.constants.CmsVersion;
-import com.publiccms.common.constants.Constants;
 import com.publiccms.common.tools.CommonUtils;
 
 /**
@@ -67,24 +64,16 @@ public class CmsUpgrader extends AbstractCmsUpgrader {
     public void setDataBaseUrl(Properties dbconfig, String host, String port, String database, String timeZone)
             throws IOException, URISyntaxException {
         StringBuilder sb = new StringBuilder();
-        sb.append("jdbc:mysql://");
+        sb.append("jdbc:kingbase8://");
         sb.append(host);
-        if (CommonUtils.notEmpty(port) && !"3306".equals(port)) {
+        if (CommonUtils.notEmpty(port)) {
             sb.append(":");
             sb.append(port);
         }
         sb.append("/");
         sb.append(database);
-        sb.append("?characterEncoding=UTF-8&useSSL=false");
-        if (CommonUtils.notEmpty(timeZone)) {
-            try {
-                sb.append("&serverTimezone=GMT");
-                sb.append(URLEncoder.encode(timeZone, Constants.DEFAULT_CHARSET_NAME));
-            } catch (UnsupportedEncodingException e) {
-            }
-        }
         dbconfig.setProperty("jdbc.url", sb.toString());
-        dbconfig.setProperty("jdbc.driverClassName", "com.mysql.cj.jdbc.Driver");
+        dbconfig.setProperty("jdbc.driverClassName", "com.kingbase8.Driver");
     }
 
     @Override
@@ -94,6 +83,6 @@ public class CmsUpgrader extends AbstractCmsUpgrader {
 
     @Override
     public int getDefaultPort() {
-        return 3306;
+        return 54321;
     }
 }
